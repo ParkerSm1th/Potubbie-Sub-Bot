@@ -18,10 +18,11 @@ client.connect();
 client.on('message', (channel, tags, message, self) => {
     const isNotBot = tags.username.toLowerCase() !== process.env.TWITCH_USER;
 	// "Alca: Hello, World!"
+    console.log(`${tags['display-name']}: ${message}`);
+    if (isNotBot) return;
     if (message.toLowerCase() == "!ping") {
         client.say(channel, `POGU IT WORKS potubbHype`);
     }
-	console.log(`${tags['display-name']}: ${message}`);
 });
 
 client.on("subscription", (channel, username, method, message, userstate) => {
