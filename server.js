@@ -19,13 +19,18 @@ const client = new tmi.Client({
 });
 
 client.connect();
+app.set('view engine', 'ejs');
+app.use(express.static(__dirname + '/public'));
 
 app.get('/', function(req, res) {
-  res.sendFile(path.join(__dirname, '/index.html'));
+
+    // ejs render automatically looks in the views folder
+    res.render('index');
 });
 
-app.listen(port);
-console.log('Server started at http://localhost:' + port);
+app.listen(port, function() {
+    console.log('Our app is running on http://localhost:' + port);
+});
 
 client.on('message', (channel, tags, message, self) => {
     const isNotBot = tags.username.toLowerCase() !== process.env.TWITCH_USER;
