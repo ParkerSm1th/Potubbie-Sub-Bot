@@ -5,6 +5,9 @@ const express = require('express');
 const app = express();
 const port = process.env.PORT || 8080;
 const path = require('path');
+const LanguageDetect = require('languagedetect');
+const lngDetector = new LanguageDetect();
+const translate = require("translate");
 
 let currentChat = [];
 
@@ -50,6 +53,13 @@ client.on('message', (channel, tags, message, self) => {
         currentChat = [];
     }
     currentChat.push(newMessage);
+    console.log(lngDetector.detect(message));
+    if (lngDetector.detect(message)[0][0] != 'english') {
+        console.log("NOT ENGLISH");
+        translate(message, "en").then(text => {
+            client.say(channel, "Translated: " + text);
+        });
+    }
     if (isNotBot) return;
     if (message.toLowerCase() == "!ping") {
         client.say(channel, `I'm up and running! potubbHype`);
