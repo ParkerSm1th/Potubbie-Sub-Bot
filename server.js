@@ -4,12 +4,9 @@ const tmi = require('tmi.js');
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 8080;
-var server = require('http').createServer(app);
-var io = require('socket.io')(server);
 const path = require('path');
 
 let currentChat = [];
-let currentEvents = [];
 
 
 const client = new tmi.Client({
@@ -33,78 +30,52 @@ app.get('/', function(req, res) {
     res.render('index');
 });
 
+
 app.get('/chat', function(req, res) {
 
     // ejs render automatically looks in the views folder
-    res.render('chat', {chat: currentChat, events: currentEvents});
+    res.render('chat', {chat: currentChat});
 });
 
-
-io.on('connection', function(socket) {
-    console.log('a user connected');
-    socket.on('chat message', function(msg){
-        console.log('message: ' + msg);
-      });
-      socket.on('twitch_event', function(msg){
-        console.log('twitch_event: ' + msg);
-      });
+app.listen(port, function() {
+    console.log('Our app is running on http://localhost:' + port);
 });
 
-server.listen(port, function(){
-    console.log('app running');
+client.on('message', (channel, tags, message, self) => {
+    const isNotBot = tags.username.toLowerCase() !== process.env.TWITCH_USER;
+	// "Alca: Hello, World!"
+    console.log(`${tags['display-name']}: ${message}`);
+    let newMessage = `${tags['display-name']}: ${message}`;
+    if (currentChat.length = 50) {
+        currentChat = [];
+    }
+    currentChat.push(newMessage);
+    if (isNotBot) return;
+    if (message.toLowerCase() == "!ping") {
+        client.say(channel, `I'm up and running! potubbHype`);
+    }
 });
 
+client.on("subscription", (channel, username, method, message, userstate) => {
+    client.say(channel, `potubbGG THANKS FOR THE SUB ${username}! potubbHype`);
+});
 
-io.on("connection", (socket) => {
+client.on("resub", (channel, username, months, message, userstate, methods) => {
+    client.say(channel, `potubbGG WELCOME BACK ${username} THANKS FOR ${months} potubbHype potubbHype`);
+});
 
-    client.on('message', (channel, tags, message, self) => {
-        const isNotBot = tags.username.toLowerCase() !== process.env.TWITCH_USER;
-        // "Alca: Hello, World!"
-        console.log(`${tags['display-name']}: ${message}`);
-        let newMessage = `${tags['display-name']}: ${message}`;
-        if (currentChat.length == 50) {
-            currentChat = [];
-        }
-        currentChat.push(newMessage);
-        io.emit('chat_message', newMessage);
-        if (isNotBot) return;
-        if (message.toLowerCase() == "!ping") {
-            client.say(channel, `I'm up and running! potubbHype`);
-        }
-    });
-  
-    client.on("subscription", (channel, username, method, message, userstate) => {
-        client.say(channel, `potubbGG THANKS FOR THE SUB ${username}! potubbHype`);
-        io.emit('twitch_event', `NEW SUB: ${username}`)
-        currentEvents.push(`NEW SUB: ${username}`);
-    });
+client.on("subgift", (channel, username, streakMonths, recipient, methods, userstate) => {
+    client.say(channel, `potubbGG ${recipient} MAKE SURE TO THANK ${username} FOR THE GIFTED SUB potubbHype`);
+});
 
-    client.on("resub", (channel, username, months, message, userstate, methods) => {
-        client.say(channel, `potubbGG WELCOME BACK ${username} THANKS FOR ${months} potubbHype potubbHype`);
-        io.emit('twitch_event', `RESUB: ${username}`)
-        currentEvents.push(`RESUB: ${username}`);
-    });
+client.on("submysterygift", (channel, username, numbOfSubs, methods, userstate) => {
+    client.say(channel, `potubbGG THANKS FOR THE GIFTED SUB ${username} potubbHype`);
+});
 
-    client.on("subgift", (channel, username, streakMonths, recipient, methods, userstate) => {
-        client.say(channel, `potubbGG ${recipient} MAKE SURE TO THANK ${username} FOR THE GIFTED SUB potubbHype`);
-        io.emit('twitch_event', `GIFTED SUB TO: ${recipient}`)
-        currentEvents.push(`GIFTED SUB TO: ${recipient}`);
-    });
-
-    client.on("submysterygift", (channel, username, numbOfSubs, methods, userstate) => {
-        client.say(channel, `potubbGG THANKS FOR THE GIFTED SUB ${username} potubbHype`);
-        io.emit('twitch_event', `GIFTED SUB: ${username}`)
-        currentEvents.push(`GIFTED SUB: ${username}`);
-    });
-
-    client.on("cheer", (channel, userstate, message) => {
-        if (userstate.bits == 1) {
-            client.say(channel, `PogChamp THANKS FOR THE ${userstate.bits} BIT ${userstate.username} potubbHype`);
-        } else {
-            client.say(channel, `PogChamp THANKS FOR THE ${userstate.bits} BITS ${userstate.username} potubbHype`);
-        }
-        io.emit('twitch_event', `BITS: ${userstate.bits} FROM ${userstate.username}`);
-        currentEvents.push(`BITS: ${userstate.bits} FROM ${userstate.username}`);
-    });
-
+client.on("cheer", (channel, userstate, message) => {
+    if (userstate.bits == 1) {
+        client.say(channel, `PogChamp THANKS FOR THE ${userstate.bits} BIT ${userstate.username} potubbHype`);
+    } else {
+        client.say(channel, `PogChamp THANKS FOR THE ${userstate.bits} BITS ${userstate.username} potubbHype`);
+    }
 });

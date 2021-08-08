@@ -24,34 +24,7 @@
               <% }) %>
         </ul>
 
-        <h2>TWITCH EVENTS:</h2>
-        <ul id="twitchEvents">
-            <% events.map((msg)=>{ %>
-                <li>
-                    <%= msg %>
-                </li>
-              <% }) %>
-        </ul>
-        
-        <script>
-        $(function () {
-                var socket = io();
-                socket.on("twitch_event", (...args) => {
-                    console.log("NEW TWITCH EVENT: " + args);
-                    $("#twitchEvents").append(`
-                    <li>
-                    ${args}
-                    </li>`);
-                });
-                socket.on("chat_message", (...args) => {
-                    console.log("NEW MESSAGE: " + args);
-                    $("#chat").append(`
-                    <li>
-                    ${args}
-                    </li>`);
-                });
-            });
-        </script>
+
         <a href="/" class="btn btn-primary btn-lg">Main Dashboard</a>
     </div>
 </div>
