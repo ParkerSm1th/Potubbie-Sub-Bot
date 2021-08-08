@@ -4,6 +4,8 @@ const tmi = require('tmi.js');
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 8080;
+var server = require('http').createServer(app);
+var io = require('socket.io')(server);
 const path = require('path');
 
 let currentChat = [];
