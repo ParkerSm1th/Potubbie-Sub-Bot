@@ -50,41 +50,52 @@ server.listen(port, function(){
     console.log('app running');
 });
 
-client.on('message', (channel, tags, message, self) => {
-    const isNotBot = tags.username.toLowerCase() !== process.env.TWITCH_USER;
-	// "Alca: Hello, World!"
-    console.log(`${tags['display-name']}: ${message}`);
-    let newMessage = `${tags['display-name']}: ${message}`;
-    if (currentChat.length == 50) {
-        currentChat = [];
-    }
-    currentChat.push(newMessage);
-    if (isNotBot) return;
-    if (message.toLowerCase() == "!ping") {
-        client.say(channel, `I'm up and running! potubbHype`);
-    }
-});
 
-client.on("subscription", (channel, username, method, message, userstate) => {
-    client.say(channel, `potubbGG THANKS FOR THE SUB ${username}! potubbHype`);
-});
+io.on("connection", (socket) => {
 
-client.on("resub", (channel, username, months, message, userstate, methods) => {
-    client.say(channel, `potubbGG WELCOME BACK ${username} THANKS FOR ${months} potubbHype potubbHype`);
-});
+    client.on('message', (channel, tags, message, self) => {
+        const isNotBot = tags.username.toLowerCase() !== process.env.TWITCH_USER;
+        // "Alca: Hello, World!"
+        console.log(`${tags['display-name']}: ${message}`);
+        let newMessage = `${tags['display-name']}: ${message}`;
+        if (currentChat.length == 50) {
+            currentChat = [];
+        }
+        currentChat.push(newMessage);
+        io.emit(newMessage);
+        if (isNotBot) return;
+        if (message.toLowerCase() == "!ping") {
+            client.say(channel, `I'm up and running! potubbHype`);
+        }
+    });
+  
+    client.on("subscription", (channel, username, method, message, userstate) => {
+        client.say(channel, `potubbGG THANKS FOR THE SUB ${username}! potubbHype`);
+        io.emit("sub event here")
+    });
 
-client.on("subgift", (channel, username, streakMonths, recipient, methods, userstate) => {
-    client.say(channel, `potubbGG ${recipient} MAKE SURE TO THANK ${username} FOR THE GIFTED SUB potubbHype`);
-});
+    client.on("resub", (channel, username, months, message, userstate, methods) => {
+        client.say(channel, `potubbGG WELCOME BACK ${username} THANKS FOR ${months} potubbHype potubbHype`);
+        io.emit("sub event here")
+    });
 
-client.on("submysterygift", (channel, username, numbOfSubs, methods, userstate) => {
-    client.say(channel, `potubbGG THANKS FOR THE GIFTED SUB ${username} potubbHype`);
-});
+    client.on("subgift", (channel, username, streakMonths, recipient, methods, userstate) => {
+        client.say(channel, `potubbGG ${recipient} MAKE SURE TO THANK ${username} FOR THE GIFTED SUB potubbHype`);
+        io.emit("sub event here")
+    });
 
-client.on("cheer", (channel, userstate, message) => {
-    if (userstate.bits == 1) {
-        client.say(channel, `PogChamp THANKS FOR THE ${userstate.bits} BIT ${userstate.username} potubbHype`);
-    } else {
-        client.say(channel, `PogChamp THANKS FOR THE ${userstate.bits} BITS ${userstate.username} potubbHype`);
-    }
+    client.on("submysterygift", (channel, username, numbOfSubs, methods, userstate) => {
+        client.say(channel, `potubbGG THANKS FOR THE GIFTED SUB ${username} potubbHype`);
+        io.emit("sub event here")
+    });
+
+    client.on("cheer", (channel, userstate, message) => {
+        if (userstate.bits == 1) {
+            client.say(channel, `PogChamp THANKS FOR THE ${userstate.bits} BIT ${userstate.username} potubbHype`);
+        } else {
+            client.say(channel, `PogChamp THANKS FOR THE ${userstate.bits} BITS ${userstate.username} potubbHype`);
+        }
+        io.emit("sub event here")
+    });
+
 });
