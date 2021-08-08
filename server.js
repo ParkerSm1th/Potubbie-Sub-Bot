@@ -56,7 +56,7 @@ client.on('message', (channel, tags, message, self) => {
     console.log(lngDetector.detect(message));
     if (lngDetector.detect(message)[0][0] != 'english') {
         console.log("NOT ENGLISH");
-        */translate(message, "en").then(text => {
+        /*translate(message, "en").then(text => {
             client.say(channel, "Translated: " + text);
         });/*
     }
