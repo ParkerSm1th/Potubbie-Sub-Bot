@@ -40,3 +40,7 @@ client.on("subgift", (channel, username, streakMonths, recipient, methods, users
 client.on("submysterygift", (channel, username, numbOfSubs, methods, userstate) => {
     client.say(channel, `potubbGG THANKS FOR THE GIFTED SUB ${username} potubbHype`);
 });
+
+client.on("cheer", (channel, userstate, message) => {
+    client.say(channel, `THANKS FOR THE ${userstate.bits} BITS ${userstate.display_name} potubbHype`);
+});
