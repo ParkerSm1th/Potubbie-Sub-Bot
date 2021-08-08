@@ -46,6 +46,9 @@ client.on('message', (channel, tags, message, self) => {
 	// "Alca: Hello, World!"
     console.log(`${tags['display-name']}: ${message}`);
     let newMessage = `${tags['display-name']}: ${message}`;
+    if (currentChat.length = 50) {
+        currentChat = [];
+    }
     currentChat.push(newMessage);
     if (isNotBot) return;
     if (message.toLowerCase() == "!ping") {
