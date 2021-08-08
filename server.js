@@ -1,6 +1,9 @@
 require('dotenv').config();
 
 const tmi = require('tmi.js');
+const express = require('express');
+const app = express();
+const port = process.env.PORT || 8080;
 
 const client = new tmi.Client({
     connection: {
@@ -14,6 +17,13 @@ const client = new tmi.Client({
 });
 
 client.connect();
+
+app.get('/', function(req, res) {
+  res.sendFile(path.join(__dirname, '/index.html'));
+});
+
+app.listen(port);
+console.log('Server started at http://localhost:' + port);
 
 client.on('message', (channel, tags, message, self) => {
     const isNotBot = tags.username.toLowerCase() !== process.env.TWITCH_USER;
