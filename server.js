@@ -58,7 +58,3 @@ client.on("cheer", (channel, userstate, message) => {
         client.say(channel, `PogChamp THANKS FOR THE ${userstate.bits} BITS ${userstate.username} potubbHype`);
     }
 });
-
-client.on("connected", (address, port) => {
-    client.say(channel, `BOT HAS COME ONLINE! (version 2.1.3)`);
-});
