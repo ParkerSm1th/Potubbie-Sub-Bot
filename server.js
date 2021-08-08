@@ -30,15 +30,22 @@ app.get('/', function(req, res) {
     res.render('index');
 });
 
-
 app.get('/chat', function(req, res) {
 
     // ejs render automatically looks in the views folder
     res.render('chat', {chat: currentChat});
 });
 
-app.listen(port, function() {
-    console.log('Our app is running on http://localhost:' + port);
+
+io.on('connection', function(socket) {
+    console.log('a user connected');
+    socket.on('chat message', function(msg){
+        console.log('message: ' + msg);
+      });
+});
+
+server.listen(port, function(){
+    console.log('app running');
 });
 
 client.on('message', (channel, tags, message, self) => {
