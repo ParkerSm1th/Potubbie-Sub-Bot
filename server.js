@@ -9,6 +9,7 @@ var io = require('socket.io')(server);
 const path = require('path');
 
 let currentChat = [];
+let currentEvents = [];
 
 
 const client = new tmi.Client({
@@ -35,7 +36,7 @@ app.get('/', function(req, res) {
 app.get('/chat', function(req, res) {
 
     // ejs render automatically looks in the views folder
-    res.render('chat', {chat: currentChat});
+    res.render('chat', {chat: currentChat, events: currentEvents});
 });
 
 
@@ -75,21 +76,25 @@ io.on("connection", (socket) => {
     client.on("subscription", (channel, username, method, message, userstate) => {
         client.say(channel, `potubbGG THANKS FOR THE SUB ${username}! potubbHype`);
         io.emit('twitch_event', `NEW SUB: ${username}`)
+        currentEvents.push(`NEW SUB: ${username}`);
     });
 
     client.on("resub", (channel, username, months, message, userstate, methods) => {
         client.say(channel, `potubbGG WELCOME BACK ${username} THANKS FOR ${months} potubbHype potubbHype`);
         io.emit('twitch_event', `RESUB: ${username}`)
+        currentEvents.push(`RESUB: ${username}`);
     });
 
     client.on("subgift", (channel, username, streakMonths, recipient, methods, userstate) => {
         client.say(channel, `potubbGG ${recipient} MAKE SURE TO THANK ${username} FOR THE GIFTED SUB potubbHype`);
         io.emit('twitch_event', `GIFTED SUB TO: ${recipient}`)
+        currentEvents.push(`GIFTED SUB TO: ${recipient}`);
     });
 
     client.on("submysterygift", (channel, username, numbOfSubs, methods, userstate) => {
         client.say(channel, `potubbGG THANKS FOR THE GIFTED SUB ${username} potubbHype`);
         io.emit('twitch_event', `GIFTED SUB: ${username}`)
+        currentEvents.push(`GIFTED SUB: ${username}`);
     });
 
     client.on("cheer", (channel, userstate, message) => {
@@ -99,6 +104,7 @@ io.on("connection", (socket) => {
             client.say(channel, `PogChamp THANKS FOR THE ${userstate.bits} BITS ${userstate.username} potubbHype`);
         }
         io.emit('twitch_event', `BITS: ${userstate.bits} FROM ${userstate.username}`);
+        currentEvents.push(`BITS: ${userstate.bits} FROM ${userstate.username}`);
     });
 
 });

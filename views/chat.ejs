@@ -26,7 +26,11 @@
 
         <h2>TWITCH EVENTS:</h2>
         <ul id="twitchEvents">
-
+            <% events.map((msg)=>{ %>
+                <li>
+                    <%= msg %>
+                </li>
+              <% }) %>
         </ul>
         
         <script>
