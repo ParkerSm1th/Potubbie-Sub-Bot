@@ -6,6 +6,8 @@ const app = express();
 const port = process.env.PORT || 8080;
 const path = require('path');
 
+const currentChat = [];
+
 
 const client = new tmi.Client({
     connection: {
@@ -28,6 +30,13 @@ app.get('/', function(req, res) {
     res.render('index');
 });
 
+
+app.get('/chat', function(req, res) {
+
+    // ejs render automatically looks in the views folder
+    res.render('chat', {chat: currentChat});
+});
+
 app.listen(port, function() {
     console.log('Our app is running on http://localhost:' + port);
 });
@@ -36,6 +45,8 @@ client.on('message', (channel, tags, message, self) => {
     const isNotBot = tags.username.toLowerCase() !== process.env.TWITCH_USER;
 	// "Alca: Hello, World!"
     console.log(`${tags['display-name']}: ${message}`);
+    let newMessage = `${tags['display-name']}: ${message}`;
+    currentChat.push(newMessage);
     if (isNotBot) return;
     if (message.toLowerCase() == "!ping") {
         client.say(channel, `I'm up and running! potubbHype`);
