@@ -44,6 +44,9 @@ io.on('connection', function(socket) {
     socket.on('chat message', function(msg){
         console.log('message: ' + msg);
       });
+      socket.on('twitch_event', function(msg){
+        console.log('twitch_event: ' + msg);
+      });
 });
 
 server.listen(port, function(){
@@ -62,7 +65,7 @@ io.on("connection", (socket) => {
             currentChat = [];
         }
         currentChat.push(newMessage);
-        io.emit(newMessage);
+        io.emit('twitch_event', newMessage);
         if (isNotBot) return;
         if (message.toLowerCase() == "!ping") {
             client.say(channel, `I'm up and running! potubbHype`);
@@ -71,22 +74,22 @@ io.on("connection", (socket) => {
   
     client.on("subscription", (channel, username, method, message, userstate) => {
         client.say(channel, `potubbGG THANKS FOR THE SUB ${username}! potubbHype`);
-        io.emit("sub event here")
+        io.emit('twitch_event', "sub event here")
     });
 
     client.on("resub", (channel, username, months, message, userstate, methods) => {
         client.say(channel, `potubbGG WELCOME BACK ${username} THANKS FOR ${months} potubbHype potubbHype`);
-        io.emit("sub event here")
+        io.emit('twitch_event', "sub event here")
     });
 
     client.on("subgift", (channel, username, streakMonths, recipient, methods, userstate) => {
         client.say(channel, `potubbGG ${recipient} MAKE SURE TO THANK ${username} FOR THE GIFTED SUB potubbHype`);
-        io.emit("sub event here")
+        io.emit('twitch_event', "sub event here")
     });
 
     client.on("submysterygift", (channel, username, numbOfSubs, methods, userstate) => {
         client.say(channel, `potubbGG THANKS FOR THE GIFTED SUB ${username} potubbHype`);
-        io.emit("sub event here")
+        io.emit('twitch_event', "sub event here")
     });
 
     client.on("cheer", (channel, userstate, message) => {
@@ -95,7 +98,7 @@ io.on("connection", (socket) => {
         } else {
             client.say(channel, `PogChamp THANKS FOR THE ${userstate.bits} BITS ${userstate.username} potubbHype`);
         }
-        io.emit("sub event here")
+        io.emit('twitch_event', "sub event here")
     });
 
 });
