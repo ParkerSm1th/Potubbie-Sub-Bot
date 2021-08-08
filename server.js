@@ -42,5 +42,9 @@ client.on("submysterygift", (channel, username, numbOfSubs, methods, userstate) 
 });
 
 client.on("cheer", (channel, userstate, message) => {
-    client.say(channel, `PogChamp THANKS FOR THE ${userstate.bits} BITS ${userstate.username} potubbHype`);
+    if (userstate.bits == 1) {
+        client.say(channel, `PogChamp THANKS FOR THE ${userstate.bits} BIT ${userstate.username} potubbHype`);
+    } else {
+        client.say(channel, `PogChamp THANKS FOR THE ${userstate.bits} BITS ${userstate.username} potubbHype`);
+    }
 });
