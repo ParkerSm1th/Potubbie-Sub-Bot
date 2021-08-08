@@ -24,6 +24,11 @@
               <% }) %>
         </ul>
 
+        <p>TWITCH EVENTS:</p>
+        <ul id="twitchEvents">
+
+        </ul>
+
         <form action="">
             <input id="m" autocomplete="off" /><button>Send</button>
         </form>
@@ -31,11 +36,11 @@
         <script>
         $(function () {
                 var socket = io();
-                $('form').on('submit', function(e){
-                    e.preventDefault();
-                    socket.emit('chat message', $('#m').val());
-                    $('#m').val('');
-                    return false;
+                socket.on("twitch_event", (...args) => {
+                    $("#twitchEvents").append(`
+                    <li>
+                    ${args}
+                    </li>`);
                 });
             });
         </script>
