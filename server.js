@@ -54,11 +54,7 @@ client.on('message', (channel, tags, message, self) => {
     }
     currentChat.push(newMessage);
     if (isNotBot) return;
-    console.log(lngDetector.detect(message));
-    if (lngDetector.detect(message)[0][0] != 'english') {
-        console.log("NOT ENGLISH");
-        
-    }
+
     if (message.toLowerCase() == "!ping") {
         client.say(channel, `I'm up and running! potubbHype`);
     }
