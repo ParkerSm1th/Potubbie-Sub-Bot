@@ -16,13 +16,11 @@
     <div class="container">
     <div class="jumbotron">
         <h2>Chat:</h2>
-        <ul id="chat">
-            <% chat.map((msg)=>{ %>
-                <li>
-                    <%= msg %>
-                </li>
-              <% }) %>
-        </ul>
+        <iframe id="twitch-chat-embed"
+                src="https://www.twitch.tv/embed/potubbie/chat?parent=po-twitch-bot.herokuapp.com"
+                height="500"
+                width="350">
+        </iframe>
 
 
         <a href="/" class="btn btn-primary btn-lg">Main Dashboard</a>
