@@ -21,7 +21,7 @@ client.on('message', (channel, tags, message, self) => {
     console.log(`${tags['display-name']}: ${message}`);
     if (isNotBot) return;
     if (message.toLowerCase() == "!ping") {
-        client.say(channel, `POGU IT WORKS potubbHype`);
+        client.say(channel, `I'm up and running! potubbHype`);
     }
 });
 
