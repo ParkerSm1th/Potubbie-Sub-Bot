@@ -15,8 +15,8 @@
 
     <div class="container">
     <div class="jumbotron">
-        <h1>Chat:</h1>
-        <ul>
+        <h2>Chat:</h2>
+        <ul id="chat">
             <% chat.map((msg)=>{ %>
                 <li>
                     <%= msg %>
@@ -24,8 +24,8 @@
               <% }) %>
         </ul>
 
-        <p>TWITCH EVENTS:</p>
-        <ul id="twitchEvents">
+        <h2>TWITCH EVENTS:</h2>
+        <ul> id="twitchEvents">
 
         </ul>
 
@@ -39,6 +39,13 @@
                 socket.on("twitch_event", (...args) => {
                     console.log("NEW TWITCH EVENT: " + args);
                     $("#twitchEvents").append(`
+                    <li>
+                    ${args}
+                    </li>`);
+                });
+                socket.on("chat_message", (...args) => {
+                    console.log("NEW MESSAGE: " + args);
+                    $("#chat").append(`
                     <li>
                     ${args}
                     </li>`);
