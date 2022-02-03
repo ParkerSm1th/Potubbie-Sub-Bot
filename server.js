@@ -16,7 +16,7 @@ const client = new tmi.Client({
     connection: {
         reconnect: true
     },
-	channels: [ 'potubbie' ],
+	channels: [ 'parkerfries' ],
     identity: {
 		username: process.env.TWITCH_USER,
 		password: process.env.TWITCH_TOKEN
@@ -56,30 +56,30 @@ client.on('message', (channel, tags, message, self) => {
     if (isNotBot) return;
 
     if (message.toLowerCase() == "!ping") {
-        client.say(channel, `I'm up and running! potubbHype`);
+        client.say(channel, `I'm up and running! parker142Logo parker142LOVE`);
     }
 });
 
 client.on("subscription", (channel, username, method, message, userstate) => {
-    client.say(channel, `potubbGG THANKS FOR THE SUB ${username}! potubbHype`);
+    client.say(channel, `parker142LOVE_HF THANKS FOR THE SUB ${username}! parker142LOVE`);
 });
 
 client.on("resub", (channel, username, months, message, userstate, methods) => {
-    client.say(channel, `potubbGG WELCOME BACK ${username} THANKS FOR ${months} potubbHype potubbHype`);
+    client.say(channel, `parker142LOVE_HF WELCOME BACK ${username} THANKS FOR ${months} parker142LOVE`);
 });
 
 client.on("subgift", (channel, username, streakMonths, recipient, methods, userstate) => {
-    client.say(channel, `potubbGG ${recipient} MAKE SURE TO THANK ${username} FOR THE GIFTED SUB potubbHype`);
+    client.say(channel, `parker142LOVE_HF ${recipient} MAKE SURE TO THANK ${username} FOR THE GIFTED SUB parker142LOVE`);
 });
 
 client.on("submysterygift", (channel, username, numbOfSubs, methods, userstate) => {
-    client.say(channel, `potubbGG THANKS FOR THE GIFTED SUB ${username} potubbHype`);
+    client.say(channel, `parker142LOVE_HF THANKS FOR THE GIFTED SUB ${username} parker142LOVE`);
 });
 
 client.on("cheer", (channel, userstate, message) => {
     if (userstate.bits == 1) {
-        client.say(channel, `PogChamp THANKS FOR THE ${userstate.bits} BIT ${userstate.username} potubbHype`);
+        client.say(channel, `parker142LOVE_HF THANKS FOR THE ${userstate.bits} BIT ${userstate.username} parker142LOVE`);
     } else {
-        client.say(channel, `PogChamp THANKS FOR THE ${userstate.bits} BITS ${userstate.username} potubbHype`);
+        client.say(channel, `parker142LOVE_HF THANKS FOR THE ${userstate.bits} BITS ${userstate.username} parker142LOVE`);
     }
 });
